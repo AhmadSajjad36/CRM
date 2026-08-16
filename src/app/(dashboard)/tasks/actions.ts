@@ -1,0 +1,4 @@
+"use server";
+import {revalidatePath} from"next/cache";import{prisma}from"@/lib/prisma";import{getCurrentUser}from"@/lib/auth";
+export async function createTask(f:FormData){const u=await getCurrentUser();if(!u)return;const title=String(f.get("title")||"").trim();if(!title)return;const due=String(f.get("dueAt")||"");await prisma.task.create({data:{workspaceId:u.workspaceId,assigneeId:u.id,title,description:String(f.get("description")||"").trim()||null,dueAt:due?new Date(due):null,priority:String(f.get("priority")||"MEDIUM"),status:"TODO"}});revalidatePath("/tasks");}
+export async function toggleTask(f:FormData){const u=await getCurrentUser(),id=String(f.get("id")||"");if(!u||!id)return;const t=await prisma.task.findFirst({where:{id,workspaceId:u.workspaceId}});if(!t)return;await prisma.task.update({where:{id},data:{status:t.status==="COMPLETED"?"TODO":"COMPLETED"}});revalidatePath("/tasks");}
