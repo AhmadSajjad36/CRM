@@ -203,7 +203,7 @@ async function main() {
         lastName: lead.lastName,
         title: lead.title,
         email: lead.email,
-        companyId: companyMap.get(lead.company),
+        companyId: companyMap.get(lead.companyName),
         score: lead.score,
         status: lead.status,
         priority: lead.score >= 80 ? "HIGH" : "MEDIUM",
