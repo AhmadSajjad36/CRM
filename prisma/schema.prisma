@@ -6,9 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
-
 model Workspace {
   id            String         @id @default(cuid())
   name          String
