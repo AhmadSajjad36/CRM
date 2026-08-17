@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
 model Workspace {
   id            String         @id @default(cuid())
   name          String
@@ -29,6 +30,8 @@ model Workspace {
   auditLogs     AuditLog[]
   deals         Deal[]
   integrations  Integration[]
+  prospects     Prospect[]
+  importJobs    ImportJob[]
 }
 
 model User {
@@ -47,6 +50,7 @@ model User {
   assignedLeads Lead[]        @relation("LeadOwner")
   assignedOpportunities Opportunity[] @relation("OpportunityOwner")
   assignedTasks Task[]        @relation("TaskAssignee")
+  prospects     Prospect[]    @relation("ProspectOwner")
 }
 
 model Company {
@@ -70,6 +74,7 @@ model Company {
   activities    Activity[]
   meetings      Meeting[]
   notesList     Note[]
+  prospects     Prospect[]
   @@index([workspaceId, name])
 }
 
@@ -145,6 +150,69 @@ model Lead {
   activities     Activity[]
   notesList      Note[]
   @@index([workspaceId, status, score])
+}
+
+
+model Prospect {
+  id              String      @id @default(cuid())
+  workspaceId     String
+  workspace       Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  firstName       String?
+  lastName        String?
+  fullName        String?
+  companyName     String?
+  companyId       String?
+  company         Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  jobTitle        String?
+  email           String?
+  phone           String?
+  mobile          String?
+  website         String?
+  linkedinUrl     String?
+  address         String?
+  city            String?
+  state           String?
+  postalCode      String?
+  country         String?
+  industry        String?
+  source          String        @default("Manual")
+  sourceUrl       String?
+  sourceMetadata  String        @default("{}")
+  status          String        @default("NEW")
+  score           Int           @default(0)
+  ownerId         String?
+  owner           User?         @relation("ProspectOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  notes           String?
+  customFields    String        @default("{}")
+  rawData         String        @default("{}")
+  importJobId     String?
+  importJob       ImportJob?    @relation(fields: [importJobId], references: [id], onDelete: SetNull)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  @@index([workspaceId, createdAt])
+  @@index([workspaceId, status])
+  @@index([workspaceId, email])
+  @@index([workspaceId, phone])
+  @@index([workspaceId, companyName])
+  @@index([workspaceId, source, createdAt])
+}
+
+model ImportJob {
+  id              String      @id @default(cuid())
+  workspaceId     String
+  workspace       Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId          String?
+  filename        String
+  source          String
+  totalRows       Int         @default(0)
+  importedRows    Int         @default(0)
+  duplicateRows   Int         @default(0)
+  failedRows      Int         @default(0)
+  status          String      @default("COMPLETED")
+  errors          String      @default("[]")
+  createdAt       DateTime    @default(now())
+  prospects       Prospect[]
+  @@index([workspaceId, createdAt])
 }
 
 model Pipeline {

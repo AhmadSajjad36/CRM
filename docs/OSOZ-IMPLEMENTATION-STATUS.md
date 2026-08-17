@@ -18,6 +18,10 @@
 - Integration-aware contact actions (`tel`, `mailto`, `sms`) without pretending a provider is connected
 - CSV lead import with duplicate-email protection
 - Expanded CRM navigation
+- Prospect repository v2: server-side search/filter/pagination, owner/source/status controls, bulk operations, exports
+- Prospect 360 source lineage with source URL, source metadata, custom fields, raw-data preservation and audit history
+- CSV/Excel prospect import with preview, mapping, duplicate handling, import history and unmapped-column preservation
+- Prospect API ingestion and bulk-action API routes
 
 ## Next implementation blocks
 

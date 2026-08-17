@@ -1,2 +1,14 @@
-import{ModulePage}from"@/components/module-page";import{importLeads}from"./actions";
-export default function Imports(){return <ModulePage title="Imports" description="Bring leads into OSOZ from CSV now; the import pipeline is designed for XLSX mapping, preview and duplicate checks next."><div className="rounded-[14px] border border-border bg-surface p-6 shadow-[var(--shadow-card)]"><h2 className="font-semibold">Import leads from CSV</h2><p className="mt-1 text-sm text-muted">Use columns such as firstName, lastName, title, email, phone and jobTitle. Existing workspace emails are skipped.</p><form action={importLeads} className="mt-5 flex flex-wrap items-center gap-3"><input required name="file" type="file" accept=".csv,text/csv" className="rounded-lg border border-border bg-white px-3 py-2 text-sm"/><button className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-fg">Import Leads</button></form></div></ModulePage>}
+import Link from "next/link";
+import { ModulePage } from "@/components/module-page";
+
+export default function Imports() {
+  return (
+    <ModulePage title="Imports" description="Import and manage prospect data without losing original source fields.">
+      <div className="rounded-[14px] border border-border bg-surface p-6 shadow-[var(--shadow-card)]">
+        <h2 className="font-semibold">Prospect imports</h2>
+        <p className="mt-1 text-sm text-muted">Upload CSV or Excel, map columns, preview records, detect duplicates and preserve every original row.</p>
+        <Link href="/prospects/import" className="mt-5 inline-flex rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-fg">Open import workflow</Link>
+      </div>
+    </ModulePage>
+  );
+}
